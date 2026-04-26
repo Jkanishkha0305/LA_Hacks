@@ -23,7 +23,7 @@ import numpy as np
 import pandas as pd
 
 from ..config import settings
-from ..schemas import HexCell, RiskScore
+from ..schemas import CellScore, HexCell, RiskScore, WhatIfResponse
 from ..state import STATE, publish_risk
 from .categories import ALL_CATEGORY_IDS, NON_ALL_IDS, count_column
 from .fuse_cudf import fuse_to_training_frame
@@ -253,6 +253,68 @@ def _compute_hex_cells_for_hour(hour_of_week: int) -> list[HexCell]:
         )
         for h3_idx, info in hex_scores.items()
     ]
+
+
+def score_with_perturbations(
+    perturbations: list,
+    hour_of_week: int | None = None,
+) -> WhatIfResponse:
+    """Score baseline vs perturbed feature set and return delta."""
+    pdf = _load_or_refresh_fused_cache()
+    if pdf is None or pdf.empty:
+        return WhatIfResponse(
+            hour_of_week=hour_of_week or 0,
+            baseline=[], perturbed=[], delta=[],
+            summary={"total_delta": 0.0, "cells_worsened": 0, "cells_improved": 0},
+        )
+
+    from datetime import datetime as _dt
+    if hour_of_week is None:
+        d = _dt.now()
+        hour_of_week = ((d.weekday()) * 24 + d.hour) % 168
+
+    base_pdf = pdf.copy()
+    base_pdf["hour_of_week"] = hour_of_week
+    base_pdf["is_weekend"] = int(hour_of_week >= 24 * 5)
+
+    pert_pdf = base_pdf.copy()
+    for p in perturbations:
+        kind = p.kind
+        params = p.params
+        if kind == "road_close":
+            pert_pdf["collision_365d"] = pert_pdf["collision_365d"] * 1.6
+            pert_pdf["crime_90d"] = pert_pdf["crime_90d"] * 1.2
+        elif kind == "weather":
+            intensity = float(params.get("intensity", 1.0))
+            pert_pdf["collision_365d"] = pert_pdf["collision_365d"] * (1.0 + 0.6 * intensity)
+        elif kind == "unit_add":
+            count = float(params.get("count", 3))
+            factor = max(0.5, 1.0 - 0.1 * count)
+            pert_pdf["crime_90d"] = pert_pdf["crime_90d"] * factor
+        elif kind == "signal_outage":
+            pert_pdf["collision_365d"] = pert_pdf["collision_365d"] * 2.1
+            pert_pdf["streetlight_30d"] = pert_pdf["streetlight_30d"] * 1.8
+
+    base_scores = np.asarray(score_features(base_pdf), dtype="float32")
+    pert_scores = np.asarray(score_features(pert_pdf), dtype="float32")
+    base_tiers = _assign_tiers(base_scores)
+    pert_tiers = _assign_tiers(pert_scores)
+    delta_raw = pert_scores - base_scores
+
+    h3_indices = base_pdf["h3"].tolist()
+    baseline = [CellScore(h3Index=h3_indices[i], score=float(np.clip(base_scores[i], 0, 1)), tier=base_tiers[i]) for i in range(len(h3_indices))]
+    perturbed = [CellScore(h3Index=h3_indices[i], score=float(np.clip(pert_scores[i], 0, 1)), tier=pert_tiers[i]) for i in range(len(h3_indices))]
+    delta = [CellScore(h3Index=h3_indices[i], score=float(delta_raw[i]), tier="high" if delta_raw[i] > 0.1 else "low") for i in range(len(h3_indices))]
+
+    worsened = int(np.sum(delta_raw > 0.02))
+    improved = int(np.sum(delta_raw < -0.02))
+    return WhatIfResponse(
+        hour_of_week=hour_of_week,
+        baseline=baseline,
+        perturbed=perturbed,
+        delta=delta,
+        summary={"total_delta": float(np.sum(delta_raw)), "cells_worsened": worsened, "cells_improved": improved},
+    )
 
 
 async def recompute_once() -> None:

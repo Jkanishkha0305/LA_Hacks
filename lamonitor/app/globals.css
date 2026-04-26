@@ -8,6 +8,7 @@
  * ------------------------------------------------------------------ */
 @layer base {
   :root {
+    color-scheme: dark;
     /* Base surfaces */
     --bg:          8 8 10;          /* #08080a — slightly darker so fg pops */
     --bg-elev:     18 18 20;        /* #121214 */
@@ -15,7 +16,7 @@
     --fg:          250 250 252;     /* #fafafc — near pure white */
     --fg-dim:      190 190 196;     /* #bebec4 — brighter body gray */
     --fg-faint:    120 120 126;     /* #78787e — still muted but readable */
-    --border:      52 52 58;        /* #34343a — more visible hairlines */
+    --border-rgb:  52 52 58;        /* #34343a — more visible hairlines */
     --border-hi:   96 96 104;       /* #606068 */
 
     /* Signal colors */
@@ -110,7 +111,7 @@
 .deck-panel {
   position: relative;
   background: rgb(var(--bg-panel));
-  border: 1px solid rgb(var(--border));
+  border: 1px solid rgb(var(--border-rgb));
 }
 
 .deck-panel--hi {
@@ -183,10 +184,10 @@
 }
 .deck-divider {
   height: 1px;
-  background: rgb(var(--border));
+  background: rgb(var(--border-rgb));
 }
 .deck-divider-dash {
-  background-image: linear-gradient(90deg, rgb(var(--border)) 50%, transparent 50%);
+  background-image: linear-gradient(90deg, rgb(var(--border-rgb)) 50%, transparent 50%);
   background-size: 6px 1px;
   background-repeat: repeat-x;
   height: 1px;
@@ -225,7 +226,7 @@
   background: rgb(var(--bg-elev));
   border: 1px solid rgb(var(--border-hi));
   cursor: pointer;
-  transition: all 120ms linear;
+  transition: border-color 120ms linear, color 120ms linear, background-color 120ms linear;
 }
 .deck-btn:hover {
   border-color: rgb(var(--signal));
@@ -252,7 +253,7 @@
 }
 .deck-btn--ghost {
   background: transparent;
-  border-color: rgb(var(--border));
+  border-color: rgb(var(--border-rgb));
 }
 
 /* --------------------------------------------------------------------
@@ -262,7 +263,7 @@
   width: 100%;
   padding: 11px 14px;
   background: rgb(var(--bg));
-  border: 1px solid rgb(var(--border));
+  border: 1px solid rgb(var(--border-rgb));
   color: rgb(var(--fg));
   font-family: inherit;
   font-size: 13px;
@@ -349,6 +350,16 @@
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 
+/* --------------------------------------------------------------------
+ * Reduced motion — disable blink, sweep, and scanning animations.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .deck-blink,
+  .animate-blink { animation: none; }
+  .deck-sweep::before { animation: none; }
+  .deck-scanlines::after { display: none; }
+}
+
 /* Legacy class retained so any old references don't crash */
 .glow-text { text-shadow: 0 0 14px rgb(var(--signal) / 0.6); color: rgb(var(--signal)); }
 .bg-radial-gradient { background: transparent; }
@@ -366,8 +377,8 @@
   color: rgb(var(--fg-faint)) !important;
   font-size: 9px !important;
   padding: 2px 6px !important;
-  border-left: 1px solid rgb(var(--border)) !important;
-  border-top: 1px solid rgb(var(--border)) !important;
+  border-left: 1px solid rgb(var(--border-rgb)) !important;
+  border-top: 1px solid rgb(var(--border-rgb)) !important;
 }
 .leaflet-control-attribution a {
   color: rgb(var(--fg-dim)) !important;
@@ -375,7 +386,7 @@
 .leaflet-control-zoom a {
   background: rgb(var(--bg-panel)) !important;
   color: rgb(var(--fg)) !important;
-  border: 1px solid rgb(var(--border)) !important;
+  border: 1px solid rgb(var(--border-rgb)) !important;
   border-radius: 0 !important;
   font-weight: 700 !important;
 }

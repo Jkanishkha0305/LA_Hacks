@@ -1,6 +1,6 @@
 # Session State
 
-Last Updated: Codex — 2026-04-23 — edge + agentic OSSInsight sweep
+Last Updated: Codex — 2026-04-26 04:05 UTC — DueIntelligence browser smoke tested
 
 ## Status
 🟡 Planning phase — no project decided yet
@@ -13,6 +13,8 @@ Last Updated: Codex — 2026-04-23 — edge + agentic OSSInsight sweep
 - Repo initialized
 - CLAUDE.md, AGENTS.md, .ai/session.md scaffolded
 - LA_Hacks_Challenges.md has full challenge/prize info
+- Installed OpenCode CLI via npm user-local prefix at `/home/asus/.local/bin/opencode` (`opencode-ai@1.14.25`) and added `/home/asus/.local/bin` to interactive bash PATH
+- Ignored local external `nyc_hack/` checkout via `.gitignore`; it should not be committed with this repo
 - Reviewed LA_Hacks_Challenges.md and mapped the 5 broad event tracks plus 17 sponsor challenges
 - Explored OSSInsight trending and collection pages for inspiration repos
 - Queried live OSSInsight MCP API for trending, collection rankings, and hot-repo details
@@ -25,6 +27,12 @@ Last Updated: Codex — 2026-04-23 — edge + agentic OSSInsight sweep
 - Researched prior winners from NVIDIA and other hardware-heavy/on-device competitions to understand what actually wins GPU/edge-compute tracks
 - Restored `hackathon_winner_resesarch.md` to its original prompt scaffold and moved the hardware-track winner memo into `research/hardware_hackathon_patterns.md`
 - Pulled an updated ASUS-focused GitHub shortlist on 2026-04-24 spanning local inference, multimodal UX, document intelligence, and physical-AI repos
+- Mapped the external `nyc_hack/` repo architecture for LA Care Navigator adaptation: Docker/FastAPI demo path, user/admin portals, planner-executor-synth-verifier pipeline, case JSON store, NeMo Agent Toolkit tool groups, guardrails, form filler, and NYC data mart dependencies
+- Fixed `nyc_hack` Docker startup on GX10: Ollama healthcheck no longer requires missing `curl`, app services mount full `./data`, Docker-internal LLM URLs use `ollama:11434`, form filler honors `OLLAMA_BASE_URL`, and LLM status waits for actual model presence
+- Fixed DueIntelligence LA migration blockers on 2026-04-26: LA address search now calls `/api/geocode`, Google Maps geocoding is used when configured, demo-safe LA fallback results prevent empty searches, visible search debug text was removed, env validation no longer blocks builds without optional Maps/Census/HUD keys, LA compatibility fields keep reports/comparisons working, vision API accepts LA coordinates, and major NYC-facing prompts/labels were converted to LA/TOC language.
+- Verified DueIntelligence with `pnpm typecheck`, `pnpm --filter web lint` (warnings only), `pnpm --filter web build`, local `/api/geocode` smoke tests for `350 S Grand Ave` and `123 Main St Los Angeles`, local `/api/parcel` smoke test, local `/api/vision` LA-coordinate smoke test, and homepage HTTP response check.
+- Continued DueIntelligence LA build on 2026-04-26: replaced broken/empty map layer sources with live LA zoning (`jjxn-vhan`), fire hazard, earthquake fault, TOC tier, parcel, and building footprint feeds; removed stale NYC PLUTO/FEMA/DCP parcel route helpers; address search and chat geocode now fetch real `/api/parcel` data after pinning; parcel analysis has a deterministic no-Gemini fallback; verified with `pnpm typecheck`, `pnpm --filter web build`, local `/api/geocode`, and local `/api/parcel` smoke tests at `http://localhost:3001`.
+- Browser-smoked DueIntelligence at `http://localhost:3001` on 2026-04-26: fresh load renders the LA map, `350 S Grand Ave` search pins and analyzes a C2-4D / TOC Tier 4 parcel, zoning/fire/fault/TOC layer toggles render with legends and no failed network responses, and the Gemini API key dialog is now optional/non-blocking so the demo can run without a key. Verified with Playwright screenshots plus `pnpm typecheck` and `pnpm --filter web build`.
 
 ## Blocked / Decisions Pending
 - Challenge selection
@@ -95,4 +103,4 @@ Last Updated: Codex — 2026-04-23 — edge + agentic OSSInsight sweep
   - `NVIDIA/NemoClaw` remains relevant as sponsor-aligned agent infrastructure, but is better as inspiration or stretch integration than as the core ASUS demo
 
 ## Last Updated
-Codex — 2026-04-24 01:01
+Codex — 2026-04-26 04:05 UTC

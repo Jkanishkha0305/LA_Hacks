@@ -45,11 +45,8 @@ export default function Home() {
           </div>
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/pages/cameras" className="deck-btn deck-btn--primary">
-              ▶ ENTER DECK
-            </Link>
-            <Link href="/protected" className="deck-btn">
-              // DASHBOARD
+            <Link href="/protected" className="deck-btn deck-btn--primary">
+              ▶ ENTER MISSION CONTROL
             </Link>
           </div>
 

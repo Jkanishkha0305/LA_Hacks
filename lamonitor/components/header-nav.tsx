@@ -4,13 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS = [
-  { href: "/pages/cameras", label: "LA DECK", code: "01" },
-  { href: "/pages/map", label: "MAP", code: "02" },
-  { href: "/pages/realtimeStreamPage", label: "REALTIME", code: "03" },
-  { href: "/pages/upload", label: "UPLOAD", code: "04" },
-  { href: "/pages/saved-videos", label: "LIBRARY", code: "05" },
-  { href: "/pages/dispatch", label: "DISPATCH", code: "06" },
-  { href: "/pages/statistics", label: "STATS", code: "07" },
+  { href: "/protected", label: "MISSION CONTROL", code: "01" },
+  { href: "/pages/realtimeStreamPage", label: "REALTIME", code: "02" },
+  { href: "/pages/dispatch", label: "DISPATCH", code: "03" },
+  { href: "/pages/statistics", label: "STATS", code: "04" },
 ];
 
 export function HeaderNav() {

@@ -14,7 +14,7 @@ export function ForecastPanel({ stats, vlmBackend }: ForecastPanelProps) {
       <Stat
         label="Predicted 24h"
         value={stats ? String(stats.predictedNext24h).padStart(3, "0") : "···"}
-        color="#67e8f9"
+        color="rgb(var(--signal))"
       />
       <Divider />
       <Stat
@@ -23,7 +23,7 @@ export function ForecastPanel({ stats, vlmBackend }: ForecastPanelProps) {
         color={
           stats?.highestRiskDivision?.tier
             ? TIER_COLOR[stats.highestRiskDivision.tier]
-            : "#67e8f9"
+            : "rgb(var(--signal))"
         }
       />
       <Divider />
@@ -32,19 +32,19 @@ export function ForecastPanel({ stats, vlmBackend }: ForecastPanelProps) {
         value={
           stats ? `${stats.hottestHexes?.length ?? 0} hot cells` : "—"
         }
-        color="#f97316"
+        color="rgb(var(--signal))"
       />
       <Divider />
       <Stat
         label="VLM"
         value={(vlmBackend ?? "nim").toUpperCase()}
-        color="#a3e635"
+        color="rgb(var(--ok))"
       />
       <Divider />
       <Stat
         label="Model"
         value={stats?.modelVersion ?? "cuml-xgb@stub"}
-        color="#a78bfa"
+        color="rgb(var(--fg-dim))"
         mono
       />
     </div>

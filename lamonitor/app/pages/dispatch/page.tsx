@@ -46,13 +46,13 @@ export default function DispatchPage() {
         </div>
 
         <div className="pointer-events-auto flex items-stretch gap-3 rounded-md border border-white/10 bg-black/70 px-3 py-2 backdrop-blur-md">
-          <Stat label="Units dispatched" value={String(routes.length).padStart(2, "0")} color="#67e8f9" />
+          <Stat label="Units dispatched" value={String(routes.length).padStart(2, "0")} color="rgb(var(--signal))" />
           <Divider />
-          <Stat label="Risk covered" value={totalCovered.toFixed(2)} color="#f97316" />
+          <Stat label="Risk covered" value={totalCovered.toFixed(2)} color="rgb(var(--signal))" />
           <Divider />
-          <Stat label="Solve time" value={`${solveMs} ms`} color="#a3e635" />
+          <Stat label="Solve time" value={`${solveMs} ms`} color="rgb(var(--ok))" />
           <Divider />
-          <Stat label="Solver" value={backend.toUpperCase()} color="#a78bfa" />
+          <Stat label="Solver" value={backend.toUpperCase()} color="rgb(var(--fg-dim))" />
         </div>
       </header>
 

@@ -251,7 +251,7 @@ def fuse_to_training_frame(resolution: int | None = None) -> pd.DataFrame:
     if HAS_RAPIDS:
         try:
             df_lib = get_df_lib()
-            return df_lib.DataFrame.from_pandas(fused)
+            return df_lib.from_pandas(fused)
         except Exception as err:
             log.warning("[fuse] cudf conversion failed: %s", err)
     return fused

@@ -14,9 +14,20 @@ import { ForecastPanel } from "@/components/forecast-panel";
 import { CategoryPicker } from "@/components/category-picker";
 import { TimeSlider } from "@/components/time-slider";
 import { CameraPopup } from "@/components/camera-popup";
+import { WhatIfDrawer } from "@/components/whatif-drawer";
+import ChatInterface from "@/components/chat-interface";
+import { WhatIfProvider, useWhatIf } from "@/lib/contexts/whatif-context";
 import type { HazardCategoryId } from "@/types";
 
 export default function MissionControlPage() {
+  return (
+    <WhatIfProvider>
+      <MissionControlInner />
+    </WhatIfProvider>
+  );
+}
+
+function MissionControlInner() {
   const [category, setCategory] = useState<HazardCategoryId>("all");
   const [hourOfWeek, setHourOfWeek] = useState<number | undefined>(undefined);
   const categories = useCategories();
@@ -32,6 +43,7 @@ export default function MissionControlPage() {
   const health = useBrainHealth();
 
   const [selectedCameraId, setSelectedCameraId] = useState<string | null>(null);
+  const whatIf = useWhatIf();
 
   const visibleCameras = useMemo(() => {
     const withGeo = cameras.filter((c) => c.latLng);
@@ -59,6 +71,8 @@ export default function MissionControlPage() {
         patrolRoutes={routes}
         selectedCameraId={selectedCameraId}
         onCameraClick={setSelectedCameraId}
+        whatIfMode={whatIf.mode}
+        whatIfResult={whatIf.result}
       />
 
       <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-between gap-4 p-4">
@@ -74,25 +88,25 @@ export default function MissionControlPage() {
             LA-native predictive surveillance ·
             <span
               className={`ml-1 ${
-                source === "poi-brain" ? "text-emerald-400" : "text-amber-400"
+                source === "poi-brain" ? "text-deck-ok" : "text-deck-signal"
               }`}
             >
               {source === "poi-brain" ? "brain online" : "local fallback"}
             </span>
             <span
               className={`ml-2 ${
-                connected ? "text-emerald-400" : "text-white/30"
+                connected ? "text-deck-ok" : "text-white/30"
               }`}
             >
               · sse {connected ? "live" : "idle"}
             </span>
             {health?.ok && (
-              <span className="ml-2 text-emerald-400">
+              <span className="ml-2 text-deck-ok">
                 · nim {health.nimModel ? "loaded" : "offline"}
               </span>
             )}
             {health?.ok === false && (
-              <span className="ml-2 text-amber-400">· brain unreachable</span>
+              <span className="ml-2 text-deck-signal">· brain unreachable</span>
             )}
           </div>
           {health?.ok && (
@@ -153,6 +167,10 @@ export default function MissionControlPage() {
             value={hourOfWeek}
             onChange={setHourOfWeek}
             className="w-[420px]"
+            onBranch={(h) => {
+              whatIf.setBranchT(h);
+              whatIf.setDrawerOpen(true);
+            }}
           />
         </div>
       </header>
@@ -197,7 +215,20 @@ export default function MissionControlPage() {
           </div>
         </div>
 
+        <button
+          className="pointer-events-auto border border-deck-signal/60 bg-black/70 px-4 py-2 text-[10px] font-bold tracking-widest text-deck-signal backdrop-blur-md hover:bg-deck-signal/10 transition-colors"
+          onClick={() => whatIf.setDrawerOpen(true)}
+        >
+          ⌘ WHAT-IF
+        </button>
+
       </footer>
+
+      {whatIf.drawerOpen && (
+        <WhatIfDrawer />
+      )}
+
+      <ChatInterface />
 
       <CameraPopup
         camera={cameras.find((c) => c.id === selectedCameraId) ?? null}

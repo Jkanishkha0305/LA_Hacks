@@ -23,11 +23,11 @@ from ..state import STATE
 log = logging.getLogger("poi.cuopt")
 
 FLEET_SEEDS: List[tuple[float, float]] = [
-    (40.7580, -73.9855),  # Times Square
-    (40.7306, -73.9866),  # Union Square
-    (40.7061, -74.0094),  # FiDi
-    (40.7614, -73.9776),  # Central Park S
-    (40.7282, -73.9942),  # SoHo
+    (34.0522, -118.2437),  # DTLA
+    (34.0928, -118.3287),  # Hollywood
+    (33.9425, -118.4081),  # LAX / Inglewood
+    (34.0195, -118.4912),  # Santa Monica
+    (34.0736, -118.1503),  # Pasadena
 ]
 ROUTE_BUDGET_S = 30 * 60  # 30 min
 AVG_SPEED_MPS = 6.0

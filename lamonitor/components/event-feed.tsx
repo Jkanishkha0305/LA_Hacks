@@ -106,7 +106,7 @@ export function EventFeed({ events, videoTimes, onEventHover, onEventClick }: Ev
 
   return (
     <div className="relative flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">Recent Incidents</h2>
+      <h2 className="text-2xl font-extrabold uppercase tracking-tight text-deck-fg">Recent Incidents</h2>
       <AnimatePresence>
         {visibleEvents.map((event) => {
           const { icon: Icon, color, bg } = getIncidentIcon(event.type)
@@ -116,7 +116,7 @@ export function EventFeed({ events, videoTimes, onEventHover, onEventClick }: Ev
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              className="relative rounded-lg border bg-card text-card-foreground shadow-sm"
+              className="relative deck-panel"
             >
               <div className="p-4">
                 <div className="flex items-center gap-4">
@@ -126,14 +126,14 @@ export function EventFeed({ events, videoTimes, onEventHover, onEventClick }: Ev
                   <div className="flex-1 space-y-1">
                     <p className="font-medium leading-none">{event.camera.name}</p>
                     <p className={cn("text-sm", color)}>{event.type}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{event.description}</p>
+                    <p className="text-[13px] font-medium text-deck-dim">{event.description}</p>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <div className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] text-deck-faint">
                     <Clock className="h-3 w-3" />
                     <span>{formatTimeAgo(event.addedAt, currentTime)}</span>
                   </div>
                 </div>
-                <div className="mt-3 flex items-center gap-1 text-xs text-gray-500">
+                <div className="mt-3 flex items-center gap-1 text-[11px] font-medium text-deck-faint">
                   <MapPin className="h-3 w-3" />
                   <span>{event.camera.address}</span>
                 </div>
@@ -144,11 +144,11 @@ export function EventFeed({ events, videoTimes, onEventHover, onEventClick }: Ev
                       handleDismiss(event.id);
                     }}
                     className={cn(
-                      "relative z-20 flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
-                      "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300",
-                      "hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-100",
-                      "transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]",
-                      "focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-gray-600"
+                      "relative z-20 flex flex-1 items-center justify-center gap-2 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em]",
+                      "bg-deck-elev text-deck-dim border border-deck-line",
+                      "hover:border-deck-signal hover:text-deck-fg",
+                      "transition-colors duration-120",
+                      "focus:outline-none focus-visible:outline-2 focus-visible:outline-deck-signal focus-visible:outline-offset-2"
                     )}
                   >
                     <X className="h-4 w-4" />
@@ -160,11 +160,11 @@ export function EventFeed({ events, videoTimes, onEventHover, onEventClick }: Ev
                       setSelectedEventForAlert(event.id);
                     }}
                     className={cn(
-                      "relative z-20 flex flex-1 items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium",
-                      "bg-deck-alert/20 text-deck-alert",
+                      "relative z-20 flex flex-1 items-center justify-center gap-2 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.12em]",
+                      "bg-deck-alert/20 text-deck-alert border border-deck-alert/30",
                       "hover:bg-deck-alert/30 hover:text-deck-fg",
-                      "transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]",
-                      "focus:outline-none focus:ring-2 focus:ring-deck-alert focus:ring-offset-2 focus:ring-offset-deck-bg"
+                      "transition-colors duration-120",
+                      "focus:outline-none focus-visible:outline-2 focus-visible:outline-deck-alert focus-visible:outline-offset-2"
                     )}
                   >
                     <Shield className="h-4 w-4" />

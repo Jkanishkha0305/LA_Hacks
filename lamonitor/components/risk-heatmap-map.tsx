@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { cellToBoundary } from "h3-js";
 import type { Camera, Heatmap, PatrolRoute, RiskScore } from "@/types";
 import { TIER_COLOR } from "@/lib/risk/tier";
+import type { MapMode, WhatIfResult } from "@/lib/contexts/whatif-context";
 
 interface RiskHeatmapMapProps {
   cameras: Camera[];
@@ -14,12 +15,29 @@ interface RiskHeatmapMapProps {
   selectedCameraId?: string | null;
   onCameraClick?: (cameraId: string) => void;
   children?: ReactNode;
+  whatIfMode?: MapMode;
+  whatIfResult?: WhatIfResult | null;
 }
 
 const LA_CENTER: [number, number] = [-118.2437, 34.0522];
 const LA_ZOOM = 10.5;
 const MAP_STYLE =
   "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+
+/** Map color for what-if delta: red for positive delta, mint for negative, dim for ~0 */
+function deltaColor(score: number): string {
+  if (score > 0.05) return "#ef4444"; // danger red
+  if (score < -0.05) return "#34d399"; // mint / ok
+  return "#78787e"; // neutral dim
+}
+
+function deltaTier(score: number): string {
+  const abs = Math.abs(score);
+  if (abs > 0.15) return "critical";
+  if (abs > 0.08) return "high";
+  if (abs > 0.03) return "med";
+  return "low";
+}
 
 export function RiskHeatmapMap({
   cameras,
@@ -29,6 +47,8 @@ export function RiskHeatmapMap({
   selectedCameraId,
   onCameraClick,
   children,
+  whatIfMode = "baseline",
+  whatIfResult,
 }: RiskHeatmapMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
@@ -158,10 +178,27 @@ export function RiskHeatmapMap({
   }, []);
 
   useEffect(() => {
-    if (!mapReady || !mapRef.current || !heatmap) return;
+    if (!mapReady || !mapRef.current) return;
+
+    // Decide which cell set to render based on what-if mode
+    let cells: { h3Index: string; score: number; tier: string }[] = [];
+    let useDeltaColors = false;
+
+    if (whatIfMode !== "baseline" && whatIfResult) {
+      if (whatIfMode === "perturbed") {
+        cells = whatIfResult.perturbed;
+      } else {
+        cells = whatIfResult.delta;
+        useDeltaColors = true;
+      }
+    } else if (heatmap) {
+      cells = heatmap.cells;
+    }
+
+    if (cells.length === 0 && !heatmap) return;
 
     try {
-      const features = heatmap.cells
+      const features = cells
         .map((cell) => {
           // cellToBoundary returns [lat, lng] pairs by default; passing true
           // flips to [lng, lat] (GeoJSON order).
@@ -171,6 +208,10 @@ export function RiskHeatmapMap({
           if (coords[0] !== coords[coords.length - 1]) {
             coords.push(coords[0]);
           }
+          const color = useDeltaColors
+            ? deltaColor(cell.score)
+            : (TIER_COLOR as Record<string, string>)[cell.tier] ?? "#78787e";
+          const tier = useDeltaColors ? deltaTier(cell.score) : cell.tier;
           return {
             type: "Feature" as const,
             geometry: {
@@ -180,8 +221,8 @@ export function RiskHeatmapMap({
             properties: {
               h3Index: cell.h3Index,
               score: cell.score,
-              tier: cell.tier,
-              color: TIER_COLOR[cell.tier],
+              tier,
+              color,
             },
           };
         })
@@ -194,7 +235,7 @@ export function RiskHeatmapMap({
     } catch (err) {
       console.error("[map] heatmap update failed", err);
     }
-  }, [mapReady, heatmap]);
+  }, [mapReady, heatmap, whatIfMode, whatIfResult]);
 
   useEffect(() => {
     if (!mapReady || !mapRef.current) return;

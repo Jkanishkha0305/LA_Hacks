@@ -126,3 +126,29 @@ class FrameAnalyzeResponse(BaseModel):
     riskScoreAtTime: Optional[float] = None
     retrievedContext: List[RetrievedIncident] = []
     rawResponse: str = ""
+
+
+# ── What-If / Perturbation ──────────────────────────────────────────────────
+
+class CellScore(BaseModel):
+    h3Index: str
+    score: float
+    tier: RiskTier
+
+
+class Perturbation(BaseModel):
+    kind: Literal["road_close", "weather", "unit_add", "signal_outage"]
+    params: Dict[str, float] = {}
+
+
+class WhatIfRequest(BaseModel):
+    perturbations: List[Perturbation] = []
+    hour_of_week: Optional[int] = Field(default=None, ge=0, le=167)
+
+
+class WhatIfResponse(BaseModel):
+    hour_of_week: int
+    baseline: List[CellScore]
+    perturbed: List[CellScore]
+    delta: List[CellScore]
+    summary: Dict[str, float]

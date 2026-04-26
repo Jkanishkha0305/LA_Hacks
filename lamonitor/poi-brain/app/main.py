@@ -27,7 +27,7 @@ from .pipeline.rapids_runtime import HAS_RAPIDS
 from .pipeline.retrieval import get_index
 from .pipeline.risk_engine import recompute_once, run_risk_engine_forever
 from .pipeline.train_cuml import load_model, train_risk_model
-from .routers import cameras, dispatch, ems, environment, frames, health, risk, stats
+from .routers import agent, cameras, dispatch, ems, environment, frames, health, risk, stats, whatif
 from .state import STATE
 from .vlm import get_vlm_client
 
@@ -138,6 +138,8 @@ app.include_router(frames.router)
 app.include_router(dispatch.router)
 app.include_router(environment.router)
 app.include_router(ems.router)
+app.include_router(whatif.router)
+app.include_router(agent.router)
 
 
 @app.get("/")

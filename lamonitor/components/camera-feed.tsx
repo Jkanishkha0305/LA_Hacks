@@ -43,7 +43,7 @@ export function CameraFeed({ camera, date = new Date(), onTimeUpdate }: CameraFe
   }
 
   return (
-    <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-black">
+    <div className="group relative aspect-[4/3] overflow-hidden bg-black">
       {/* Camera Feed */}
       <video
         ref={videoRef}
@@ -79,12 +79,12 @@ export function CameraFeed({ camera, date = new Date(), onTimeUpdate }: CameraFe
 
       {/* Top bar */}
       <div className="absolute left-0 right-0 top-0 flex items-center justify-between p-4">
-        <div className="flex items-center gap-2 text-green-400">
+        <div className="flex items-center gap-2 text-deck-ok">
           <Wifi className="h-4 w-4" />
           <Battery className="h-4 w-4" />
         </div>
-        <div className="rounded-full bg-white/20 p-1.5 backdrop-blur-sm">
-          <MoreHorizontal className="h-4 w-4 text-white" />
+        <div className="bg-deck-bg/80 p-1.5">
+          <MoreHorizontal className="h-4 w-4 text-deck-dim" />
         </div>
       </div>
 

@@ -1011,7 +1011,7 @@ export default function Page() {
           </div>
         </aside>
       </div>
-      <ChatInterface timestamps={timestamps} />
+      <ChatInterface />
     </div>
   )
 }
