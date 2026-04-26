@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LA Monitor — Design System Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'Satoshi';
+    src: url('https://cdn.fontshare.com/wf/HUQM3YW7CZRFT2ZQP4W6RS3YOZSYGLMD/2LWJRX5YMBDTAB25C45WON7XQEBXQ4B5/4CBQVDGJEJYMBR77VNWXU7QQYFQYP5LT.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Satoshi';
+    src: url('https://cdn.fontshare.com/wf/HUQM3YW7CZRFT2ZQP4W6RS3YOZSYGLMD/GVTACQCKBUUSPDCJKTWICQFHWZAAWXHT/K2OOLZMZRXHXQAIQZAFQ4XFUQKZCTXFH.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Satoshi';
+    src: url('https://cdn.fontshare.com/wf/HUQM3YW7CZRFT2ZQP4W6RS3YOZSYGLMD/V6K4OPMH6MFLVWCMGNTIWN5VQVBJFNWU/CXHNFYVCM3GMYHMYJQZ4V7WOZV6PHA4Y.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --bg: #0F172A;
+    --surface: #1E293B;
+    --elevated: #334155;
+    --border: #334155;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --accent: #3B82F6;
+    --accent-hover: #2563EB;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --success: #10B981;
+    --radius: 8px;
+    --font-display: 'Satoshi', system-ui, sans-serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'DM Mono', 'Geist Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .preview-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+  @media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center;
+    padding: 80px 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 64px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+  .hero p {
+    font-size: 18px;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── Typography specimen ── */
+  .type-specimen {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 16px;
+  }
+  .type-specimen .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .type-specimen .sample-display {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+  .type-specimen .sample-body {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .type-specimen .sample-mono {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .type-specimen .sample-h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  /* ── Color swatches ── */
+  .swatch-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .swatch-color {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .swatch-name {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .swatch-hex {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── Component samples ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 150ms ease-out;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--text-secondary); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: transparent;
+  }
+  .btn-ghost:hover { color: var(--text-primary); }
+  .btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+  .btn-danger:hover { background: rgba(239, 68, 68, 0.2); }
+
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+
+  .input {
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+    transition: border-color 150ms ease-out;
+  }
+  .input:focus { border-color: var(--accent); }
+  .input::placeholder { color: var(--text-muted); }
+
+  .input-group { margin-bottom: 16px; }
+  .input-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* ── Stat card ── */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-delta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .stat-delta.up { color: var(--success); }
+  .stat-delta.down { color: var(--danger); }
+  .stat-delta.neutral { color: var(--text-muted); }
+
+  /* ── Alert banners ── */
+  .alert {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  .alert-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); color: var(--success); }
+  .alert-warning { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); color: var(--warning); }
+  .alert-danger { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger); }
+  .alert-info { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: var(--accent); }
+
+  /* ── Badge / pill ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  .badge-live { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+  .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+  .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+  .badge-neutral { background: rgba(148, 163, 184, 0.15); color: var(--text-secondary); }
+  .badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .badge-dot.pulse {
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead {
+    background: var(--bg);
+  }
+  th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(59, 130, 246, 0.03); }
+  td .camera-id {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  /* ── Mockup: Dashboard layout ── */
+  .mockup {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .mockup-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .mockup-brand {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .mockup-brand span { color: var(--accent); }
+  .mockup-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .mockup-body {
+    display: flex;
+    min-height: 420px;
+  }
+  .mockup-sidebar {
+    width: 200px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 16px 0;
+    flex-shrink: 0;
+  }
+  .mockup-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 150ms ease-out;
+  }
+  .mockup-nav-item:hover { color: var(--text-primary); background: rgba(59, 130, 246, 0.05); }
+  .mockup-nav-item.active {
+    color: var(--accent);
+    background: rgba(59, 130, 246, 0.08);
+    border-right: 2px solid var(--accent);
+  }
+  .mockup-nav-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+  .mockup-content {
+    flex: 1;
+    padding: 24px;
+  }
+
+  .mockup-map {
+    background: #162032;
+    border-radius: var(--radius);
+    height: 260px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .mockup-map-label {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(15, 23, 42, 0.8);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .hex-dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    opacity: 0.7;
+  }
+
+  /* ── Divider ── */
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 48px 32px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    Design System Preview
+  </div>
+  <h1>LA Monitor</h1>
+  <p>Civic tech design system — warm authority, institutional trust, production-grade feel.</p>
+</div>
+
+<div class="preview-container">
+
+  <!-- ════════ TYPOGRAPHY ════════ -->
+  <div class="section">
+    <div class="section-label">01 / Typography</div>
+    <div class="section-title">Font Stack</div>
+    <div class="section-desc">Satoshi for headings (authoritative, geometric). DM Sans for body (humanist, readable). DM Mono for data.</div>
+
+    <div class="grid-2">
+      <div class="type-specimen">
+        <div class="label">Display — Satoshi 700</div>
+        <div class="sample-display">Risk Forecast<br>Division 7-NW</div>
+      </div>
+      <div class="type-specimen">
+        <div class="label">Heading — Satoshi 600</div>
+        <div class="sample-h2">Active Camera Feeds</div>
+        <div class="sample-body" style="margin-top:8px">364 Caltrans D7 cameras monitored in real-time across Los Angeles County. Each frame analyzed by on-device vision model.</div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:16px">
+      <div class="type-specimen">
+        <div class="label">Body — DM Sans 400</div>
+        <div class="sample-body">The risk scoring pipeline fuses LAPD crime reports, traffic collision data, and 311 service requests with live camera analysis to predict where incidents are forming. Updated every 15 minutes per hexagonal cell at H3 resolution 9, covering approximately 150 meters.</div>
+      </div>
+      <div class="type-specimen">
+        <div class="label">Data — DM Mono 400</div>
+        <div class="sample-mono">
+          CAM-LA-0247 · 34.0522°N 118.2437°W<br>
+          RISK: 0.847 · TIER: HIGH<br>
+          LAST_FRAME: 2026-04-26T02:14:33Z<br>
+          HEX: 892a100d2c7ffff<br>
+          STATUS: ACTIVE · LATENCY: 142ms
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ COLORS ════════ -->
+  <div class="section">
+    <div class="section-label">02 / Color Palette</div>
+    <div class="section-title">Warm Slate + Civic Blue</div>
+    <div class="section-desc">Navy-warm backgrounds signal "for people, not operators." Blue accent for trust and authority.</div>
+
+    <div style="margin-bottom: 24px">
+      <div class="input-label" style="margin-bottom:12px">Foundations</div>
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="swatch-color" style="background:#0F172A"></div>
+          <div class="swatch-name">Background</div>
+          <div class="swatch-hex">#0F172A</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#1E293B"></div>
+          <div class="swatch-name">Surface</div>
+          <div class="swatch-hex">#1E293B</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#334155"></div>
+          <div class="swatch-name">Elevated</div>
+          <div class="swatch-hex">#334155</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#F1F5F9"></div>
+          <div class="swatch-name">Text</div>
+          <div class="swatch-hex">#F1F5F9</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#94A3B8"></div>
+          <div class="swatch-name">Secondary</div>
+          <div class="swatch-hex">#94A3B8</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#64748B"></div>
+          <div class="swatch-name">Muted</div>
+          <div class="swatch-hex">#64748B</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="input-label" style="margin-bottom:12px">Semantic</div>
+      <div class="swatch-row">
+        <div class="swatch">
+          <div class="swatch-color" style="background:#3B82F6"></div>
+          <div class="swatch-name">Accent</div>
+          <div class="swatch-hex">#3B82F6</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#10B981"></div>
+          <div class="swatch-name">Success</div>
+          <div class="swatch-hex">#10B981</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#F59E0B"></div>
+          <div class="swatch-name">Warning</div>
+          <div class="swatch-hex">#F59E0B</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background:#EF4444"></div>
+          <div class="swatch-name">Danger</div>
+          <div class="swatch-hex">#EF4444</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ COMPONENTS ════════ -->
+  <div class="section">
+    <div class="section-label">03 / Components</div>
+    <div class="section-title">UI Kit</div>
+    <div class="section-desc">Buttons, inputs, alerts, badges, stat cards — all using the design system tokens.</div>
+
+    <div class="input-label" style="margin-bottom:12px">Buttons</div>
+    <div class="btn-row">
+      <button class="btn btn-primary">Deploy Patrol</button>
+      <button class="btn btn-secondary">View Details</button>
+      <button class="btn btn-ghost">Cancel</button>
+      <button class="btn btn-danger">Remove Camera</button>
+    </div>
+
+    <div class="input-label" style="margin-bottom:12px">Inputs</div>
+    <div class="grid-2" style="margin-bottom:32px">
+      <div class="input-group">
+        <label class="input-label">Camera Search</label>
+        <input class="input" placeholder="Search by ID, location, or division..." />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Risk Threshold</label>
+        <input class="input" placeholder="0.00 — 1.00" />
+      </div>
+    </div>
+
+    <div class="input-label" style="margin-bottom:12px">Alerts</div>
+    <div class="alert alert-success">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      VLM pipeline healthy — 364 cameras active, 142ms avg latency
+    </div>
+    <div class="alert alert-warning">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Division 7-NW risk score elevated to 0.89 — monitor recommended
+    </div>
+    <div class="alert alert-danger">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      Camera CAM-LA-0183 offline — last response 4m ago
+    </div>
+    <div class="alert alert-info" style="margin-bottom:32px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Forecast model retraining — next update in 12 minutes
+    </div>
+
+    <div class="input-label" style="margin-bottom:12px">Badges</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px">
+      <span class="badge badge-live"><span class="badge-dot pulse"></span> Live</span>
+      <span class="badge badge-warning"><span class="badge-dot"></span> Elevated</span>
+      <span class="badge badge-danger"><span class="badge-dot"></span> Critical</span>
+      <span class="badge badge-neutral"><span class="badge-dot"></span> Offline</span>
+    </div>
+
+    <div class="input-label" style="margin-bottom:12px">Stat Cards</div>
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="stat-label">Live Cameras</div>
+        <div class="stat-value">364</div>
+        <div class="stat-delta up">↑ 12 from yesterday</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Risk Score</div>
+        <div class="stat-value">0.42</div>
+        <div class="stat-delta down">↓ 0.08 from last hour</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Frame Latency</div>
+        <div class="stat-value">142ms</div>
+        <div class="stat-delta neutral">— stable</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Alerts Today</div>
+        <div class="stat-value">23</div>
+        <div class="stat-delta up">↑ 7 flagged critical</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ TABLE ════════ -->
+  <div class="section">
+    <div class="section-label">04 / Data Display</div>
+    <div class="section-title">Camera Table</div>
+    <div class="section-desc">Tabular data uses DM Mono for IDs and coordinates. Comfortable row height for scanability.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Camera ID</th>
+            <th>Location</th>
+            <th>Division</th>
+            <th>Risk</th>
+            <th>Status</th>
+            <th>Last Frame</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="camera-id">CAM-LA-0247</span></td>
+            <td>I-10 / La Brea Ave</td>
+            <td>Division 7-NW</td>
+            <td><span style="color:var(--danger);font-weight:600">0.89</span></td>
+            <td><span class="badge badge-live"><span class="badge-dot pulse"></span> Live</span></td>
+            <td style="font-family:var(--font-mono);font-size:13px;color:var(--text-muted)">2s ago</td>
+          </tr>
+          <tr>
+            <td><span class="camera-id">CAM-LA-0183</span></td>
+            <td>US-101 / Cahuenga Blvd</td>
+            <td>Division 6-HW</td>
+            <td><span style="color:var(--warning);font-weight:600">0.67</span></td>
+            <td><span class="badge badge-warning"><span class="badge-dot"></span> Elevated</span></td>
+            <td style="font-family:var(--font-mono);font-size:13px;color:var(--text-muted)">5s ago</td>
+          </tr>
+          <tr>
+            <td><span class="camera-id">CAM-LA-0312</span></td>
+            <td>I-405 / Wilshire Blvd</td>
+            <td>Division 9-WS</td>
+            <td><span style="color:var(--success);font-weight:600">0.23</span></td>
+            <td><span class="badge badge-live"><span class="badge-dot pulse"></span> Live</span></td>
+            <td style="font-family:var(--font-mono);font-size:13px;color:var(--text-muted)">1s ago</td>
+          </tr>
+          <tr>
+            <td><span class="camera-id">CAM-LA-0091</span></td>
+            <td>SR-110 / Ave 26</td>
+            <td>Division 4-CE</td>
+            <td><span style="color:var(--text-muted);font-weight:600">—</span></td>
+            <td><span class="badge badge-neutral"><span class="badge-dot"></span> Offline</span></td>
+            <td style="font-family:var(--font-mono);font-size:13px;color:var(--text-muted)">4m ago</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ════════ MOCKUP ════════ -->
+  <div class="section">
+    <div class="section-label">05 / Dashboard Mockup</div>
+    <div class="section-title">What It Could Look Like</div>
+    <div class="section-desc">A realistic dashboard layout applying all design system tokens. Sidebar nav, stat cards, map visualization.</div>
+
+    <div class="mockup">
+      <div class="mockup-topbar">
+        <div class="mockup-brand">LA <span>Monitor</span></div>
+        <div class="mockup-topbar-right">
+          <span class="badge badge-live"><span class="badge-dot pulse"></span> Live</span>
+          <span style="font-family:var(--font-mono)">UTC 02:14</span>
+          <span style="font-family:var(--font-mono)">34.0522°N 118.2437°W</span>
+        </div>
+      </div>
+      <div class="mockup-body">
+        <div class="mockup-sidebar">
+          <div class="mockup-nav-item active">
+            <div class="mockup-nav-icon"></div>
+            Dashboard
+          </div>
+          <div class="mockup-nav-item">
+            <div class="mockup-nav-icon"></div>
+            Cameras
+          </div>
+          <div class="mockup-nav-item">
+            <div class="mockup-nav-icon"></div>
+            Map
+          </div>
+          <div class="mockup-nav-item">
+            <div class="mockup-nav-icon"></div>
+            Realtime
+          </div>
+          <div class="mockup-nav-item">
+            <div class="mockup-nav-icon"></div>
+            Dispatch
+          </div>
+          <div class="mockup-nav-item">
+            <div class="mockup-nav-icon"></div>
+            Statistics
+          </div>
+        </div>
+        <div class="mockup-content">
+          <div class="grid-4">
+            <div class="stat-card">
+              <div class="stat-label">Cameras</div>
+              <div class="stat-value" style="font-size:24px">364</div>
+              <div class="stat-delta up" style="font-size:11px">↑ 12</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Avg Risk</div>
+              <div class="stat-value" style="font-size:24px">0.42</div>
+              <div class="stat-delta down" style="font-size:11px">↓ 0.08</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Latency</div>
+              <div class="stat-value" style="font-size:24px">142ms</div>
+              <div class="stat-delta neutral" style="font-size:11px">— stable</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Alerts</div>
+              <div class="stat-value" style="font-size:24px">23</div>
+              <div class="stat-delta up" style="font-size:11px">↑ 7 critical</div>
+            </div>
+          </div>
+          <div class="mockup-map">
+            <!-- Simulated hex risk dots -->
+            <div class="hex-dot" style="background:var(--danger);top:30%;left:35%"></div>
+            <div class="hex-dot" style="background:var(--danger);top:35%;left:38%;width:10px;height:10px"></div>
+            <div class="hex-dot" style="background:var(--warning);top:25%;left:42%"></div>
+            <div class="hex-dot" style="background:var(--warning);top:40%;left:30%"></div>
+            <div class="hex-dot" style="background:var(--warning);top:50%;left:55%;width:10px;height:10px"></div>
+            <div class="hex-dot" style="background:var(--success);top:60%;left:45%"></div>
+            <div class="hex-dot" style="background:var(--success);top:45%;left:65%"></div>
+            <div class="hex-dot" style="background:var(--success);top:55%;left:25%;width:8px;height:8px"></div>
+            <div class="hex-dot" style="background:var(--accent);top:70%;left:50%;opacity:0.4;width:8px;height:8px"></div>
+            <div class="hex-dot" style="background:var(--accent);top:20%;left:60%;opacity:0.4;width:8px;height:8px"></div>
+            <div class="mockup-map-label">Los Angeles County · H3 res-9 · 15min forecast</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ BORDER RADIUS ════════ -->
+  <div class="section">
+    <div class="section-label">06 / Border Radius</div>
+    <div class="section-title">8px — Professional, Not Precious</div>
+    <div class="section-desc">Enough softness to feel modern. Not so much it looks like a toy.</div>
+    <div style="display:flex;gap:24px;align-items:end">
+      <div style="text-align:center">
+        <div style="width:80px;height:80px;background:var(--surface);border:1px solid var(--border);border-radius:0px;margin-bottom:8px"></div>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">0px (current)</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:80px;height:80px;background:var(--accent);border-radius:8px;margin-bottom:8px"></div>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--accent)">8px (proposed)</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:80px;height:80px;background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:8px"></div>
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">16px (too soft)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════ SPACING ════════ -->
+  <div class="section">
+    <div class="section-label">07 / Spacing Scale</div>
+    <div class="section-title">8px Base Unit</div>
+    <div class="section-desc">Comfortable density. Not cramped, not wasteful.</div>
+    <div style="display:flex;gap:16px;align-items:end;flex-wrap:wrap">
+      <div style="text-align:center">
+        <div style="width:4px;height:4px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">4</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:8px;height:8px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">8</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:12px;height:12px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">12</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:16px;height:16px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">16</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:24px;height:24px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">24</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:32px;height:32px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">32</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:48px;height:48px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">48</span>
+      </div>
+      <div style="text-align:center">
+        <div style="width:64px;height:64px;background:var(--accent);margin:0 auto 8px"></div>
+        <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-muted)">64</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  LA Monitor Design System · Industrial Civic · LA Hacks 2026
+</div>
+
+</body>
+</html>
